@@ -130,5 +130,51 @@
     <div class="vichy" aria-hidden="true"></div>
   </main>
 
+
+  <!-- Música de fondo: "I Feel So Alive" (Capital Kings) vía el reproductor oficial de YouTube.
+       Los navegadores no dejan sonar audio solo, así que empieza con el primer toque en la página. -->
+  <div id="yt-musica" aria-hidden="true"></div>
+  <button class="musica" type="button" aria-label="Reproducir música" aria-pressed="false">
+    <svg class="on" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V6l11-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+    <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6v12M15 6v12"/></svg>
+  </button>
+  <script>
+    (function () {
+      var boton = document.querySelector(".musica");
+      var player, listo = false, sonando = false, quiereSonar = false;
+
+      function pintar() {
+        boton.classList.toggle("sonando", sonando);
+        boton.setAttribute("aria-pressed", sonando);
+        boton.setAttribute("aria-label", sonando ? "Pausar música" : "Reproducir música");
+      }
+      function tocar() { quiereSonar = true; if (listo) { player.unMute(); player.setVolume(60); player.playVideo(); } }
+      function pausar() { quiereSonar = false; if (listo) player.pauseVideo(); }
+
+      window.onYouTubeIframeAPIReady = function () {
+        player = new YT.Player("yt-musica", {
+          videoId: "kdRI1A7F_pI",
+          playerVars: { playsinline: 1, loop: 1, playlist: "kdRI1A7F_pI", controls: 0 },
+          events: {
+            onReady: function () { listo = true; if (quiereSonar) tocar(); },
+            onStateChange: function (e) { sonando = e.data === YT.PlayerState.PLAYING; pintar(); }
+          }
+        });
+      };
+
+      // Primer toque en cualquier parte de la página: empieza la canción
+      function primerToque(e) {
+        document.removeEventListener("pointerdown", primerToque, true);
+        if (!boton.contains(e.target)) tocar();
+      }
+      document.addEventListener("pointerdown", primerToque, true);
+
+      boton.addEventListener("click", function () { sonando ? pausar() : tocar(); });
+
+      var s = document.createElement("script");
+      s.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(s);
+    })();
+  </script>
 </body>
 </html>

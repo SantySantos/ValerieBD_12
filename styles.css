@@ -293,3 +293,20 @@ body {
   92%  { transform: translateY(-6px); }
   100% { opacity: 1; transform: none; }
 }
+
+/* Música de fondo: reproductor oculto + botón flotante */
+#yt-musica { position: fixed; width: 1px; height: 1px; left: -10px; top: -10px; opacity: 0; pointer-events: none; }
+.musica {
+  position: fixed; right: 16px; bottom: 16px; z-index: 10;
+  width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--cereza); color: #fff;
+  border: 3px solid var(--rosa);
+  box-shadow: 0 6px 16px rgba(0,0,0,.3);
+  cursor: pointer;
+}
+.musica svg { width: 22px; height: 22px; }
+.musica .off { display: none; }
+.musica.sonando .on { display: none; }
+.musica.sonando .off { display: block; }
+.musica.sonando { animation: latido 2.4s ease-in-out infinite; }
