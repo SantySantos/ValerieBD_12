@@ -1,0 +1,295 @@
+:root {
+  --vino: #6e0f1f;          /* vino tinto principal */
+  --vino-oscuro: #4a0713;
+  --cereza: #b3132b;
+  --cereza-brillo: #e0344d;
+  --rosa: #f7c5cf;
+  --rosa-suave: #fde8ec;
+  --rosa-mono: #f29bb0;
+  --crema: #fbf3e8;
+  --hoja: #4f7d33;
+  --dorado: #f3d9a4;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  min-height: 100vh;
+  font-family: "Quicksand", system-ui, sans-serif;
+  color: var(--crema);
+  background-color: var(--rosa-suave);
+  /* Cuadros vichy rosados */
+  background-image:
+    linear-gradient(90deg, rgba(242,155,176,.35) 50%, transparent 50%),
+    linear-gradient(rgba(242,155,176,.35) 50%, transparent 50%);
+  background-size: 36px 36px;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  padding: 28px 16px 0;
+}
+
+/* ---------- Cerezas que caen ---------- */
+.lluvia { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.lluvia svg {
+  position: absolute; top: -60px; width: 34px; height: 34px;
+  animation: caer linear infinite;
+  opacity: .85;
+}
+.lluvia svg:nth-child(1) { left: 6%;  animation-duration: 11s; animation-delay: 0s; }
+.lluvia svg:nth-child(2) { left: 24%; animation-duration: 14s; animation-delay: 3s; width: 26px; }
+.lluvia svg:nth-child(3) { left: 48%; animation-duration: 12s; animation-delay: 6s; }
+.lluvia svg:nth-child(4) { left: 70%; animation-duration: 16s; animation-delay: 1.5s; width: 28px; }
+.lluvia svg:nth-child(5) { left: 88%; animation-duration: 13s; animation-delay: 8s; }
+.lluvia svg:nth-child(6) { left: 36%; animation-duration: 18s; animation-delay: 10s; width: 22px; }
+@keyframes caer {
+  0%   { transform: translateY(0) rotate(-15deg); }
+  50%  { transform: translateY(55vh) rotate(15deg) translateX(18px); }
+  100% { transform: translateY(115vh) rotate(-10deg); }
+}
+
+/* ---------- Tarjeta en forma de arco ---------- */
+.invitacion {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 420px;
+  margin-top: 52px;
+}
+
+.arco {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,.08), transparent 55%),
+    linear-gradient(180deg, var(--vino) 0%, var(--vino-oscuro) 100%);
+  border-radius: 210px 210px 28px 28px;
+  padding: 96px 26px 36px;
+  text-align: center;
+  border: 6px solid var(--crema);
+  outline: 2px dashed var(--rosa-mono);
+  outline-offset: -16px;
+  box-shadow: 0 18px 40px rgba(74,7,19,.35);
+  animation: aparecer .9s ease-out both;
+}
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(24px) scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Cereza con moño en la cima del arco (como sticker) */
+.sticker {
+  position: absolute; left: 50%; top: -58px;
+  width: 124px; height: 124px;
+  transform: translateX(-50%);
+  background: var(--rosa-suave);
+  border: 5px solid #fff;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  box-shadow: 0 8px 18px rgba(74,7,19,.3);
+  animation: balanceo 3.5s ease-in-out infinite;
+  z-index: 2;
+}
+.sticker svg { width: 96px; height: 96px; }
+@keyframes balanceo {
+  0%, 100% { transform: translateX(-50%) rotate(-6deg); }
+  50%      { transform: translateX(-50%) rotate(6deg); }
+}
+
+.pre {
+  font-family: "Fredoka", sans-serif;
+  font-size: .82rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--rosa);
+}
+
+.titulo-edad {
+  margin-top: 6px;
+  font-family: "Fredoka", sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--dorado);
+}
+
+/* ---------- Plantilla de foto ---------- */
+.foto-marco {
+  position: relative;
+  width: 190px; height: 190px;
+  margin: 22px auto 10px;
+  border-radius: 50%;
+  padding: 8px;
+  background: repeating-conic-gradient(var(--rosa) 0 15deg, #fff 15deg 30deg);
+  box-shadow: 0 10px 24px rgba(0,0,0,.3);
+}
+.foto {
+  position: relative;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid var(--crema);
+  background:
+    radial-gradient(circle at 30% 30%, #fff 0, var(--rosa-suave) 60%);
+  display: grid; place-items: center;
+}
+/* Texto que se ve solo si todavía no hay foto */
+.foto-vacia {
+  color: var(--vino);
+  font-size: .78rem; font-weight: 700; line-height: 1.3;
+  padding: 0 18px;
+}
+.foto-vacia svg { width: 38px; height: 38px; display: block; margin: 0 auto 6px; }
+.foto img {
+  /* Recorte centrado en Valerie (la foto original es de cuerpo entero, 960x1280) */
+  position: absolute;
+  width: 266.7%; height: auto;
+  max-width: none;
+  left: -50.7%; top: -80.7%;
+}
+/* Mini cerezas decorando el marco */
+.foto-marco .mini { position: absolute; width: 50px; height: 50px; }
+.foto-marco .mini.a { right: -14px; bottom: 4px; transform: rotate(14deg); }
+.foto-marco .mini.b { left: -12px; top: 6px; transform: rotate(-18deg) scale(.85); }
+
+.nombre {
+  font-family: "Great Vibes", cursive;
+  font-weight: 400;
+  font-size: 4.4rem;
+  line-height: 1.05;
+  color: #fff;
+  text-shadow: 0 3px 0 var(--cereza), 0 6px 14px rgba(0,0,0,.35);
+  margin-top: 4px;
+}
+
+.doce {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 4px;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1rem; color: var(--rosa);
+}
+.doce b {
+  display: inline-grid; place-items: center;
+  width: 54px; height: 54px; border-radius: 50%;
+  background: var(--cereza);
+  border: 3px solid var(--rosa);
+  color: #fff; font-size: 1.6rem; font-weight: 600;
+  box-shadow: inset -6px -6px 0 rgba(0,0,0,.15), inset 6px 6px 0 rgba(255,255,255,.18);
+}
+
+.frase {
+  margin: 20px auto 0;
+  max-width: 300px;
+  font-size: 1rem; line-height: 1.55;
+  color: var(--crema);
+}
+
+.separador {
+  display: flex; align-items: center; gap: 10px;
+  margin: 24px 0 18px;
+  color: var(--rosa-mono);
+}
+.separador::before, .separador::after {
+  content: ""; flex: 1; height: 2px;
+  background: repeating-linear-gradient(90deg, var(--rosa-mono) 0 6px, transparent 6px 12px);
+}
+.separador svg { width: 30px; height: 30px; }
+
+/* ---------- Detalles ---------- */
+.detalles { display: grid; gap: 12px; text-align: left; }
+.dato {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--crema);
+  color: var(--vino-oscuro);
+  border-radius: 18px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 0 var(--rosa-mono);
+}
+.dato .icono {
+  flex: none;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--rosa);
+  display: grid; place-items: center;
+  font-size: 1.35rem;
+}
+.dato small {
+  display: block;
+  font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--cereza); font-weight: 700;
+}
+.dato span { font-size: 1.05rem; font-weight: 700; }
+
+/* ---------- Botón WhatsApp ---------- */
+.confirmar {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-top: 28px;
+  padding: 17px 22px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--cereza-brillo), var(--cereza));
+  color: #fff;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.12rem; font-weight: 600;
+  text-decoration: none;
+  border: 3px solid var(--rosa);
+  box-shadow: 0 6px 0 var(--vino-oscuro), 0 12px 22px rgba(0,0,0,.3);
+  transition: transform .15s, box-shadow .15s;
+  animation: latido 2.4s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+}
+.confirmar:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--vino-oscuro); }
+.confirmar svg { width: 26px; height: 26px; flex: none; }
+@keyframes latido {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
+}
+.nota {
+  margin-top: 14px;
+  font-size: .82rem;
+  color: var(--rosa);
+}
+
+.despedida {
+  margin-top: 26px;
+  font-family: "Great Vibes", cursive;
+  font-size: 2rem;
+  color: var(--dorado);
+}
+
+/* Franja vichy roja como en la inspiración */
+.vichy {
+  position: relative; z-index: 0;
+  align-self: stretch;
+  height: 110px;
+  margin: -50px -16px 0;
+  border-top: 4px solid var(--crema);
+  background-color: #fff;
+  background-image:
+    linear-gradient(90deg, rgba(179,19,43,.55) 50%, transparent 50%),
+    linear-gradient(rgba(179,19,43,.55) 50%, transparent 50%);
+  background-size: 28px 28px;
+}
+.pie {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+  width: 100%;
+}
+
+@media (max-width: 360px) {
+  .nombre { font-size: 3.7rem; }
+  .arco { padding-left: 18px; padding-right: 18px; }
+  .foto-marco { width: 168px; height: 168px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; }
+  .lluvia { display: none; }
+}
+
+/* El "12" cae desde arriba cuando la página termina de cargar */
+.js:not(.cargado) .doce b { opacity: 0; }
+.cargado .doce b { animation: caer-doce 1.1s cubic-bezier(.3,0,.5,1) both; }
+@keyframes caer-doce {
+  0%   { opacity: 0; transform: translateY(-100vh) rotate(-200deg); }
+  10%  { opacity: 1; }
+  60%  { transform: translateY(0) rotate(0); }
+  72%  { transform: translateY(-22px) scale(1.05, .95); }
+  84%  { transform: translateY(0) scale(1.08, .92); }
+  92%  { transform: translateY(-6px); }
+  100% { opacity: 1; transform: none; }
+}
