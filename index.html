@@ -156,26 +156,41 @@
         boton.setAttribute("aria-pressed", sonando);
         boton.setAttribute("aria-label", sonando ? "Pausar música" : "Reproducir música");
       }
-      function tocar() { quiereSonar = true; if (listo) { player.unMute(); player.setVolume(60); player.playVideo(); } }
-      function pausar() { quiereSonar = false; if (listo) player.pauseVideo(); }
+      var reproduciendo = false;
+      function actualizar() { sonando = reproduciendo && quiereSonar; pintar(); }
+      function tocar() {
+        quiereSonar = true;
+        if (listo) { player.unMute(); player.setVolume(60); player.playVideo(); }
+        actualizar();
+      }
+      function pausar() { quiereSonar = false; if (listo) player.pauseVideo(); actualizar(); }
 
+      // La canción arranca en silencio apenas carga (los celulares sí lo permiten);
+      // el primer toque solo le sube el volumen.
       window.onYouTubeIframeAPIReady = function () {
         player = new YT.Player("yt-musica", {
           videoId: "kdRI1A7F_pI",
-          playerVars: { playsinline: 1, loop: 1, playlist: "kdRI1A7F_pI", controls: 0 },
+          playerVars: { autoplay: 1, mute: 1, playsinline: 1, loop: 1, playlist: "kdRI1A7F_pI", controls: 0 },
           events: {
-            onReady: function () { listo = true; if (quiereSonar) tocar(); },
-            onStateChange: function (e) { sonando = e.data === YT.PlayerState.PLAYING; pintar(); }
+            onReady: function () {
+              listo = true;
+              if (quiereSonar) tocar(); else { player.mute(); player.playVideo(); }
+            },
+            onStateChange: function (e) { reproduciendo = e.data === YT.PlayerState.PLAYING; actualizar(); }
           }
         });
       };
 
-      // Primer toque en cualquier parte de la página: empieza la canción
+      // Primer toque en cualquier parte de la página: se activa el sonido.
+      // Se usa touchend/click porque los celulares no cuentan "pointerdown" como toque real.
       function primerToque(e) {
-        document.removeEventListener("pointerdown", primerToque, true);
-        if (!boton.contains(e.target)) tocar();
+        if (boton.contains(e.target)) return;
+        document.removeEventListener("touchend", primerToque, true);
+        document.removeEventListener("click", primerToque, true);
+        tocar();
       }
-      document.addEventListener("pointerdown", primerToque, true);
+      document.addEventListener("touchend", primerToque, true);
+      document.addEventListener("click", primerToque, true);
 
       boton.addEventListener("click", function () { sonando ? pausar() : tocar(); });
 
