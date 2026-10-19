@@ -75,10 +75,11 @@
         <p class="titulo-edad">a celebrar el cumpleaños de</p>
 
         <!-- =====================================================
-             PLANTILLA DE FOTO
-             Guarda la foto de la cumpleañera en esta misma carpeta
-             con el nombre "ValeriCumple.jpeg" (o cambia el src de abajo).
-             Si no hay foto, se muestra un aviso en su lugar.
+             CARRUSEL DE FOTOS
+             Las fotos cambian solas cada pocos segundos.
+             Para agregar otra, copia una línea <img> y ajusta su recorte
+             con --w (zoom), --x y --y (posición) en el style.
+             Si no hay fotos, se muestra un aviso en su lugar.
              ===================================================== -->
         <div class="foto-marco">
           <div class="foto">
@@ -86,7 +87,14 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="#6e0f1f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
               Aquí va la foto de Valerie
             </div>
-            <img src="ValeriCumple.jpeg" alt="Foto de Valerie" onerror="this.remove()">
+            <img class="activa" src="ValeriCumple.jpeg" alt="Valerie con Mickey" onerror="this.remove()"
+                 style="--w:266.7%; --x:-50.7%; --y:-80.7%">
+            <img src="valerie-castillo.jpeg" alt="Valerie frente al castillo" onerror="this.remove()"
+                 style="--w:252.6%; --x:-84.2%; --y:-105.3%">
+            <img src="valerie-orcas.jpeg" alt="Valerie junto al mural de orcas" onerror="this.remove()"
+                 style="--w:266.7%; --x:-113.9%; --y:-166.7%">
+            <img src="valerie-playa.jpeg" alt="Valerie en la playa" onerror="this.remove()"
+                 style="--w:252.6%; --x:-69.7%; --y:-210.5%">
           </div>
           <svg class="mini a" aria-hidden="true"><use href="#cereza"/></svg>
           <svg class="mini b" aria-hidden="true"><use href="#cereza"/></svg>
@@ -175,6 +183,16 @@
       s.src = "https://www.youtube.com/iframe_api";
       document.head.appendChild(s);
     })();
+
+    // Carrusel: cambia la foto del círculo cada 3.5 segundos
+    setInterval(function () {
+      var fotos = document.querySelectorAll(".foto img");
+      if (fotos.length < 2) return;
+      var actual = document.querySelector(".foto img.activa") || fotos[fotos.length - 1];
+      var i = Array.prototype.indexOf.call(fotos, actual);
+      actual.classList.remove("activa");
+      fotos[(i + 1) % fotos.length].classList.add("activa");
+    }, 3500);
   </script>
 </body>
 </html>

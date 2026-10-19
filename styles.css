@@ -137,12 +137,18 @@ body {
 }
 .foto-vacia svg { width: 38px; height: 38px; display: block; margin: 0 auto 6px; }
 .foto img {
-  /* Recorte centrado en Valerie (la foto original es de cuerpo entero, 960x1280) */
+  /* Recorte centrado en Valerie (fotos de cuerpo entero, 960x1280).
+     Cada foto define su zoom y posición con --w, --x y --y en el HTML. */
   position: absolute;
-  width: 266.7%; height: auto;
+  width: var(--w, 100%); height: auto;
   max-width: none;
-  left: -50.7%; top: -80.7%;
+  left: var(--x, 0); top: var(--y, 0);
+  opacity: 0;
+  transition: opacity 0s 1s; /* la anterior se esconde cuando la nueva ya cubrió el círculo */
 }
+/* Carrusel: la foto nueva aparece con un fundido encima de la anterior */
+.foto img.activa { opacity: 1; z-index: 1; transition: opacity 1s ease-in-out; }
+.foto { isolation: isolate; } /* para que las fotos no tapen las mini cerezas del marco */
 /* Mini cerezas decorando el marco */
 .foto-marco .mini { position: absolute; width: 50px; height: 50px; }
 .foto-marco .mini.a { right: -14px; bottom: 4px; transform: rotate(14deg); }
