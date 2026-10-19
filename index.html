@@ -138,67 +138,7 @@
     <div class="vichy" aria-hidden="true"></div>
   </main>
 
-
-  <!-- Música de fondo: "I Feel So Alive" (Capital Kings) vía el reproductor oficial de YouTube.
-       Los navegadores no dejan sonar audio solo, así que empieza con el primer toque en la página. -->
-  <div id="yt-musica" aria-hidden="true"></div>
-  <button class="musica" type="button" aria-label="Reproducir música" aria-pressed="false">
-    <svg class="on" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V6l11-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
-    <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6v12M15 6v12"/></svg>
-  </button>
   <script>
-    (function () {
-      var boton = document.querySelector(".musica");
-      var player, listo = false, sonando = false, quiereSonar = false;
-
-      function pintar() {
-        boton.classList.toggle("sonando", sonando);
-        boton.setAttribute("aria-pressed", sonando);
-        boton.setAttribute("aria-label", sonando ? "Pausar música" : "Reproducir música");
-      }
-      var reproduciendo = false;
-      function actualizar() { sonando = reproduciendo && quiereSonar; pintar(); }
-      function tocar() {
-        quiereSonar = true;
-        if (listo) { player.unMute(); player.setVolume(60); player.playVideo(); }
-        actualizar();
-      }
-      function pausar() { quiereSonar = false; if (listo) player.pauseVideo(); actualizar(); }
-
-      // La canción arranca en silencio apenas carga (los celulares sí lo permiten);
-      // el primer toque solo le sube el volumen.
-      window.onYouTubeIframeAPIReady = function () {
-        player = new YT.Player("yt-musica", {
-          videoId: "kdRI1A7F_pI",
-          playerVars: { autoplay: 1, mute: 1, playsinline: 1, loop: 1, playlist: "kdRI1A7F_pI", controls: 0 },
-          events: {
-            onReady: function () {
-              listo = true;
-              if (quiereSonar) tocar(); else { player.mute(); player.playVideo(); }
-            },
-            onStateChange: function (e) { reproduciendo = e.data === YT.PlayerState.PLAYING; actualizar(); }
-          }
-        });
-      };
-
-      // Primer toque en cualquier parte de la página: se activa el sonido.
-      // Se usa touchend/click porque los celulares no cuentan "pointerdown" como toque real.
-      function primerToque(e) {
-        if (boton.contains(e.target)) return;
-        document.removeEventListener("touchend", primerToque, true);
-        document.removeEventListener("click", primerToque, true);
-        tocar();
-      }
-      document.addEventListener("touchend", primerToque, true);
-      document.addEventListener("click", primerToque, true);
-
-      boton.addEventListener("click", function () { sonando ? pausar() : tocar(); });
-
-      var s = document.createElement("script");
-      s.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(s);
-    })();
-
     // Carrusel: cambia la foto del círculo cada 3.5 segundos
     setInterval(function () {
       var fotos = document.querySelectorAll(".foto img");
